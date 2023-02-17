@@ -95,14 +95,16 @@ func (b LittleEndianBlock) SetInt8(offset int, value int8) {
 
 // Uint16 returns the uint16 value at the specified offset.
 func (b LittleEndianBlock) Uint16(offset int) uint16 {
-	return uint16(b[offset+0])<<0 |
-		uint16(b[offset+1])<<8
+	b = b[offset:] // runs faster this way
+	return uint16(b[0])<<0 |
+		uint16(b[1])<<8
 }
 
 // SetUint16 places the uint16 value at the specified offset.
 func (b LittleEndianBlock) SetUint16(offset int, value uint16) {
-	b[offset+0] = byte(value >> 0)
-	b[offset+1] = byte(value >> 8)
+	b = b[offset:] // runs faster this way
+	b[0] = byte(value >> 0)
+	b[1] = byte(value >> 8)
 }
 
 // Int16 returns the int16 value at the specified offset.
@@ -117,18 +119,20 @@ func (b LittleEndianBlock) SetInt16(offset int, value int16) {
 
 // Uint32 returns the uint32 value at the specified offset.
 func (b LittleEndianBlock) Uint32(offset int) uint32 {
-	return uint32(b[offset+0])<<0 |
-		uint32(b[offset+1])<<8 |
-		uint32(b[offset+2])<<16 |
-		uint32(b[offset+3])<<24
+	b = b[offset:] // runs faster this way
+	return uint32(b[0])<<0 |
+		uint32(b[1])<<8 |
+		uint32(b[2])<<16 |
+		uint32(b[3])<<24
 }
 
 // SetUint32 places the uint32 value at the specified offset.
 func (b LittleEndianBlock) SetUint32(offset int, value uint32) {
-	b[offset+0] = byte(value >> 0)
-	b[offset+1] = byte(value >> 8)
-	b[offset+2] = byte(value >> 16)
-	b[offset+3] = byte(value >> 24)
+	b = b[offset:] // runs faster this way
+	b[0] = byte(value >> 0)
+	b[1] = byte(value >> 8)
+	b[2] = byte(value >> 16)
+	b[3] = byte(value >> 24)
 }
 
 // Int32 returns the int32 value at the specified offset.
@@ -143,26 +147,28 @@ func (b LittleEndianBlock) SetInt32(offset int, value int32) {
 
 // Uint64 returns the uint64 value at the specified offset.
 func (b LittleEndianBlock) Uint64(offset int) uint64 {
-	return uint64(b[offset+0])<<0 |
-		uint64(b[offset+1])<<8 |
-		uint64(b[offset+2])<<16 |
-		uint64(b[offset+3])<<24 |
-		uint64(b[offset+4])<<32 |
-		uint64(b[offset+5])<<40 |
-		uint64(b[offset+6])<<48 |
-		uint64(b[offset+7])<<56
+	b = b[offset:] // runs faster this way
+	return uint64(b[0])<<0 |
+		uint64(b[1])<<8 |
+		uint64(b[2])<<16 |
+		uint64(b[3])<<24 |
+		uint64(b[4])<<32 |
+		uint64(b[5])<<40 |
+		uint64(b[6])<<48 |
+		uint64(b[7])<<56
 }
 
 // SetUint64 places the uint64 value at the specified offset.
 func (b LittleEndianBlock) SetUint64(offset int, value uint64) {
-	b[offset+0] = byte(value >> 0)
-	b[offset+1] = byte(value >> 8)
-	b[offset+2] = byte(value >> 16)
-	b[offset+3] = byte(value >> 24)
-	b[offset+4] = byte(value >> 32)
-	b[offset+5] = byte(value >> 40)
-	b[offset+6] = byte(value >> 48)
-	b[offset+7] = byte(value >> 56)
+	b = b[offset:] // runs faster this way
+	b[0] = byte(value >> 0)
+	b[1] = byte(value >> 8)
+	b[2] = byte(value >> 16)
+	b[3] = byte(value >> 24)
+	b[4] = byte(value >> 32)
+	b[5] = byte(value >> 40)
+	b[6] = byte(value >> 48)
+	b[7] = byte(value >> 56)
 }
 
 // Int64 returns the int64 value at the specified offset.
@@ -223,14 +229,16 @@ func (b BigEndianBlock) SetInt8(offset int, value int8) {
 
 // Uint16 returns the uint16 value at the specified offset.
 func (b BigEndianBlock) Uint16(offset int) uint16 {
-	return uint16(b[offset+1])<<0 |
-		uint16(b[offset+0])<<8
+	b = b[offset:] // runs faster this way
+	return uint16(b[1])<<0 |
+		uint16(b[0])<<8
 }
 
 // SetUint16 places the uint16 value at the specified offset.
 func (b BigEndianBlock) SetUint16(offset int, value uint16) {
-	b[offset+1] = byte(value >> 0)
-	b[offset+0] = byte(value >> 8)
+	b = b[offset:] // runs faster this way
+	b[1] = byte(value >> 0)
+	b[0] = byte(value >> 8)
 }
 
 // Int16 returns the int16 value at the specified offset.
@@ -245,18 +253,20 @@ func (b BigEndianBlock) SetInt16(offset int, value int16) {
 
 // Uint32 returns the uint32 value at the specified offset.
 func (b BigEndianBlock) Uint32(offset int) uint32 {
-	return uint32(b[offset+3])<<0 |
-		uint32(b[offset+2])<<8 |
-		uint32(b[offset+1])<<16 |
-		uint32(b[offset+0])<<24
+	b = b[offset:] // runs faster this way
+	return uint32(b[3])<<0 |
+		uint32(b[2])<<8 |
+		uint32(b[1])<<16 |
+		uint32(b[0])<<24
 }
 
 // SetUint32 places the uint32 value at the specified offset.
 func (b BigEndianBlock) SetUint32(offset int, value uint32) {
-	b[offset+3] = byte(value >> 0)
-	b[offset+2] = byte(value >> 8)
-	b[offset+1] = byte(value >> 16)
-	b[offset+0] = byte(value >> 24)
+	b = b[offset:] // runs faster this way
+	b[3] = byte(value >> 0)
+	b[2] = byte(value >> 8)
+	b[1] = byte(value >> 16)
+	b[0] = byte(value >> 24)
 }
 
 // Int32 returns the int32 value at the specified offset.
@@ -271,26 +281,28 @@ func (b BigEndianBlock) SetInt32(offset int, value int32) {
 
 // Uint64 returns the uint64 value at the specified offset.
 func (b BigEndianBlock) Uint64(offset int) uint64 {
-	return uint64(b[offset+7])<<0 |
-		uint64(b[offset+6])<<8 |
-		uint64(b[offset+5])<<16 |
-		uint64(b[offset+4])<<24 |
-		uint64(b[offset+3])<<32 |
-		uint64(b[offset+2])<<40 |
-		uint64(b[offset+1])<<48 |
-		uint64(b[offset+0])<<56
+	b = b[offset:] // runs faster this way
+	return uint64(b[7])<<0 |
+		uint64(b[6])<<8 |
+		uint64(b[5])<<16 |
+		uint64(b[4])<<24 |
+		uint64(b[3])<<32 |
+		uint64(b[2])<<40 |
+		uint64(b[1])<<48 |
+		uint64(b[0])<<56
 }
 
 // SetUint64 places the uint64 value at the specified offset.
 func (b BigEndianBlock) SetUint64(offset int, value uint64) {
-	b[offset+7] = byte(value >> 0)
-	b[offset+6] = byte(value >> 8)
-	b[offset+5] = byte(value >> 16)
-	b[offset+4] = byte(value >> 24)
-	b[offset+3] = byte(value >> 32)
-	b[offset+2] = byte(value >> 40)
-	b[offset+1] = byte(value >> 48)
-	b[offset+0] = byte(value >> 56)
+	b = b[offset:] // runs faster this way
+	b[7] = byte(value >> 0)
+	b[6] = byte(value >> 8)
+	b[5] = byte(value >> 16)
+	b[4] = byte(value >> 24)
+	b[3] = byte(value >> 32)
+	b[2] = byte(value >> 40)
+	b[1] = byte(value >> 48)
+	b[0] = byte(value >> 56)
 }
 
 // Int64 returns the int64 value at the specified offset.
