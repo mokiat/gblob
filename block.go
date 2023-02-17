@@ -2,9 +2,76 @@ package gblob
 
 import "math"
 
+// Block represents a fixed-size block of bytes that holds values encoded in a
+// particular order.
+type Block interface {
+
+	// Uint8 returns the uint8 value at the specified offset.
+	Uint8(offset int) uint8
+
+	// SetUint8 places the uint8 value at the specified offset.
+	SetUint8(offset int, value uint8)
+
+	// Int8 returns the int8 value at the specified offset.
+	Int8(offset int) int8
+
+	// SetInt8 places the int8 value at the specified offset.
+	SetInt8(offset int, value int8)
+
+	// Uint16 returns the uint16 value at the specified offset.
+	Uint16(offset int) uint16
+
+	// SetUint16 places the uint16 value at the specified offset.
+	SetUint16(offset int, value uint16)
+
+	// Int16 returns the int16 value at the specified offset.
+	Int16(offset int) int16
+
+	// SetInt16 places the int16 value at the specified offset.
+	SetInt16(offset int, value int16)
+
+	// Uint32 returns the uint32 value at the specified offset.
+	Uint32(offset int) uint32
+
+	// SetUint32 places the uint32 value at the specified offset.
+	SetUint32(offset int, value uint32)
+
+	// Int32 returns the int32 value at the specified offset.
+	Int32(offset int) int32
+
+	// SetInt32 places the int32 value at the specified offset.
+	SetInt32(offset int, value int32)
+
+	// Uint64 returns the uint64 value at the specified offset.
+	Uint64(offset int) uint64
+
+	// SetUint64 places the uint64 value at the specified offset.
+	SetUint64(offset int, value uint64)
+
+	// Int64 returns the int64 value at the specified offset.
+	Int64(offset int) int64
+
+	// SetInt64 places the int64 value at the specified offset.
+	SetInt64(offset int, value uint64)
+
+	// Float32 returns the float32 value at the specified offset.
+	Float32(offset int) float32
+
+	// SetFloat32 places the float32 value at the specified offset.
+	SetFloat32(offset int, value float32)
+
+	// Float64 returns the float64 value at the specified offset.
+	Float64(offset int) float64
+
+	// SetFloat64 places the float64 value at the specified offset.
+	SetFloat64(offset int, value float64)
+}
+
 // LittleEndianBlock represents a fixed-size block of bytes that holds
 // values encoded in Little Endian order.
 type LittleEndianBlock []byte
+
+var _ Block = (LittleEndianBlock)(nil)
 
 // Uint8 returns the uint8 value at the specified offset.
 func (b LittleEndianBlock) Uint8(offset int) uint8 {
@@ -131,6 +198,8 @@ func (b LittleEndianBlock) SetFloat64(offset int, value float64) {
 // BigEndianBlock represents a fixed-size block of bytes that holds
 // values encoded in Big Endian order.
 type BigEndianBlock []byte
+
+var _ Block = (BigEndianBlock)(nil)
 
 // Uint8 returns the uint8 value at the specified offset.
 func (b BigEndianBlock) Uint8(offset int) uint8 {
