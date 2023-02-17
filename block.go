@@ -52,7 +52,7 @@ type Block interface {
 	Int64(offset int) int64
 
 	// SetInt64 places the int64 value at the specified offset.
-	SetInt64(offset int, value uint64)
+	SetInt64(offset int, value int64)
 
 	// Float32 returns the float32 value at the specified offset.
 	Float32(offset int) float32
@@ -171,7 +171,7 @@ func (b LittleEndianBlock) Int64(offset int) int64 {
 }
 
 // SetInt64 places the int64 value at the specified offset.
-func (b LittleEndianBlock) SetInt64(offset int, value uint64) {
+func (b LittleEndianBlock) SetInt64(offset int, value int64) {
 	b.SetUint64(offset, uint64(value))
 }
 
@@ -299,7 +299,7 @@ func (b BigEndianBlock) Int64(offset int) int64 {
 }
 
 // SetInt64 places the int64 value at the specified offset.
-func (b BigEndianBlock) SetInt64(offset int, value uint64) {
+func (b BigEndianBlock) SetInt64(offset int, value int64) {
 	b.SetUint64(offset, uint64(value))
 }
 
@@ -321,4 +321,10 @@ func (b BigEndianBlock) Float64(offset int) float64 {
 // SetFloat64 places the float64 value at the specified offset.
 func (b BigEndianBlock) SetFloat64(offset int, value float64) {
 	b.SetUint64(offset, math.Float64bits(value))
+}
+
+// blockBuffer is a generics constraint for a Block
+type blockBuffer interface {
+	~[]uint8
+	Block
 }
