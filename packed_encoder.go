@@ -37,6 +37,12 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 	switch kind := value.Kind(); kind {
 	case reflect.Pointer:
 		return e.encodeValue(value.Elem())
+	case reflect.Bool:
+		if value.Bool() {
+			return e.out.WriteUint8(uint8(0x01))
+		} else {
+			return e.out.WriteUint8(uint8(0x00))
+		}
 	case reflect.Uint8:
 		return e.out.WriteUint8(uint8(value.Uint()))
 	case reflect.Int8:
@@ -59,6 +65,33 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		return e.out.WriteFloat64(float64(value.Float()))
 	case reflect.Array:
 		count := value.Len()
+		for i := 0; i < count; i++ {
+			if err := e.encodeValue(value.Index(i)); err != nil {
+				return err
+			}
+		}
+		return nil
+	case reflect.Slice:
+		count := value.Len()
+		if err := e.out.WriteUint64(uint64(count)); err != nil {
+			return err
+		}
+		if value.Type().Elem().Kind() == reflect.Uint8 { // fast track
+			data := value.Interface().([]uint8)
+			return e.out.WriteBytes(data)
+		} else {
+			for i := 0; i < count; i++ {
+				if err := e.encodeValue(value.Index(i)); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	case reflect.String:
+		count := value.Len()
+		if err := e.out.WriteUint64(uint64(count)); err != nil {
+			return err
+		}
 		for i := 0; i < count; i++ {
 			if err := e.encodeValue(value.Index(i)); err != nil {
 				return err
