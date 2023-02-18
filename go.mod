@@ -3,6 +3,7 @@ module github.com/mokiat/gblob
 go 1.19
 
 require (
+	github.com/mokiat/gog v0.5.0
 	github.com/onsi/ginkgo/v2 v2.8.1
 	github.com/onsi/gomega v1.26.0
 )
