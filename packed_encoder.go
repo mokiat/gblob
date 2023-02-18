@@ -87,6 +87,23 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 			}
 		}
 		return nil
+	case reflect.Map:
+		count := value.Len()
+		if err := e.out.WriteUint64(uint64(count)); err != nil {
+			return err
+		}
+		entries := value.MapRange()
+		for entries.Next() {
+			entryKey := entries.Key()
+			if err := e.encodeValue(entryKey); err != nil {
+				return err
+			}
+			entryValue := entries.Value()
+			if err := e.encodeValue(entryValue); err != nil {
+				return err
+			}
+		}
+		return nil
 	case reflect.String:
 		count := value.Len()
 		if err := e.out.WriteUint64(uint64(count)); err != nil {
@@ -94,6 +111,15 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		}
 		for i := 0; i < count; i++ {
 			if err := e.encodeValue(value.Index(i)); err != nil {
+				return err
+			}
+		}
+		return nil
+	case reflect.Struct:
+		fieldCount := value.NumField()
+		for i := 0; i < fieldCount; i++ {
+			field := value.Field(i)
+			if err := e.encodeValue(field); err != nil {
 				return err
 			}
 		}
