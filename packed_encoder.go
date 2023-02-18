@@ -53,6 +53,18 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		return e.out.WriteUint64(uint64(value.Uint()))
 	case reflect.Int64:
 		return e.out.WriteInt64(int64(value.Int()))
+	case reflect.Float32:
+		return e.out.WriteFloat32(float32(value.Float()))
+	case reflect.Float64:
+		return e.out.WriteFloat64(float64(value.Float()))
+	case reflect.Array:
+		count := value.Len()
+		for i := 0; i < count; i++ {
+			if err := e.encodeValue(value.Index(i)); err != nil {
+				return err
+			}
+		}
+		return nil
 	default:
 		return fmt.Errorf("unsupported type: %v", kind)
 	}
