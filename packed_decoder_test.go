@@ -295,5 +295,34 @@ var _ = Describe("PackedDecoder", func() {
 				C: 0x01,
 			}),
 		),
+		Entry("Decodable",
+			seq(0x39),
+			&testDecodable{},
+			&testDecodable{
+				value: 0x39,
+			},
+		),
+		Entry("*Decodable",
+			seq(0x39),
+			gog.PtrOf((*testDecodable)(nil)),
+			gog.PtrOf(&testDecodable{
+				value: 0x39,
+			}),
+		),
 	)
 })
+
+type testDecodable struct {
+	value byte
+}
+
+var _ gblob.PackedDecodable = (*testDecodable)(nil)
+
+func (d *testDecodable) DecodePacked(reader gblob.TypedReader) error {
+	v, err := reader.ReadUint8()
+	if err != nil {
+		return err
+	}
+	d.value = v
+	return nil
+}

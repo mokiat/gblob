@@ -273,5 +273,21 @@ var _ = Describe("PackedEncoder", func() {
 			}),
 			seq(0x66, 0x55, 0xFF, 0x01),
 		),
+		Entry("Encodable",
+			testEncodable{},
+			seq(0x39),
+		),
+		Entry("*Encodable",
+			&testEncodable{},
+			seq(0x39),
+		),
 	)
 })
+
+type testEncodable struct{}
+
+var _ gblob.PackedEncodable = testEncodable{}
+
+func (d testEncodable) EncodePacked(encoder gblob.TypedWriter) error {
+	return encoder.WriteUint8(0x39)
+}

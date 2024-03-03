@@ -6,6 +6,18 @@ import (
 	"reflect"
 )
 
+var (
+	decodableType = reflect.TypeFor[PackedDecodable]()
+)
+
+// PackedDecodable is an interface that can be implemented by types that want to
+// provide a custom packed decoding.
+type PackedDecodable interface {
+
+	// DecodePacked decodes the receiver from the specified reader.
+	DecodePacked(reader TypedReader) error
+}
+
 // NewLittleEndianPackedDecoder creates a new PackedDecoder that is configured
 // to read its input in Little Endian order.
 func NewLittleEndianPackedDecoder(in io.Reader) *PackedDecoder {
@@ -31,14 +43,17 @@ type PackedDecoder struct {
 // Decode decodes the specified target value from the Reader.
 func (d *PackedDecoder) Decode(target interface{}) error {
 	value := reflect.ValueOf(target)
-	if value.Kind() != reflect.Pointer {
-		return fmt.Errorf("target %T is not a pointer", target)
-	}
-	actual := value.Elem()
-	return d.decodeValue(actual)
+	return d.decodeValue(value)
 }
 
 func (d *PackedDecoder) decodeValue(value reflect.Value) error {
+	if value.Type().Implements(decodableType) {
+		if value.Kind() == reflect.Pointer && value.IsNil() {
+			value.Set(reflect.New(value.Type().Elem()))
+		}
+		decodable := value.Interface().(PackedDecodable)
+		return decodable.DecodePacked(d.in)
+	}
 	switch kind := value.Kind(); kind {
 	case reflect.Pointer:
 		if value.IsNil() {
