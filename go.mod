@@ -1,6 +1,6 @@
 module github.com/mokiat/gblob
 
-go 1.19
+go 1.22
 
 require (
 	github.com/mokiat/gog v0.11.1
