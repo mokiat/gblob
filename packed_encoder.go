@@ -6,6 +6,18 @@ import (
 	"reflect"
 )
 
+var (
+	encodableType = reflect.TypeFor[PackedEncodable]()
+)
+
+// PackedEncodable is an interface that can be implemented by types that want to
+// provide a custom packed encoding.
+type PackedEncodable interface {
+
+	// EncodePacked encodes the receiver into the specified writer.
+	EncodePacked(writer TypedWriter) error
+}
+
 // NewLittleEndianPackedEncoder creates a new PackedEncoder that is configured
 // to write its output in Little Endian order.
 func NewLittleEndianPackedEncoder(out io.Writer) *PackedEncoder {
@@ -34,6 +46,10 @@ func (e *PackedEncoder) Encode(source any) error {
 }
 
 func (e *PackedEncoder) encodeValue(value reflect.Value) error {
+	if value.Type().Implements(encodableType) {
+		encodable := value.Interface().(PackedEncodable)
+		return encodable.EncodePacked(e.out)
+	}
 	switch kind := value.Kind(); kind {
 	case reflect.Pointer:
 		return e.encodeValue(value.Elem())

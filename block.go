@@ -96,6 +96,7 @@ func (b LittleEndianBlock) SetInt8(offset int, value int8) {
 // Uint16 returns the uint16 value at the specified offset.
 func (b LittleEndianBlock) Uint16(offset int) uint16 {
 	b = b[offset:] // runs faster this way
+	_ = b[1]       // early bounds check
 	return uint16(b[0])<<0 |
 		uint16(b[1])<<8
 }
@@ -103,6 +104,7 @@ func (b LittleEndianBlock) Uint16(offset int) uint16 {
 // SetUint16 places the uint16 value at the specified offset.
 func (b LittleEndianBlock) SetUint16(offset int, value uint16) {
 	b = b[offset:] // runs faster this way
+	_ = b[1]       // early bounds check
 	b[0] = byte(value >> 0)
 	b[1] = byte(value >> 8)
 }
@@ -120,6 +122,7 @@ func (b LittleEndianBlock) SetInt16(offset int, value int16) {
 // Uint32 returns the uint32 value at the specified offset.
 func (b LittleEndianBlock) Uint32(offset int) uint32 {
 	b = b[offset:] // runs faster this way
+	_ = b[3]       // early bounds check
 	return uint32(b[0])<<0 |
 		uint32(b[1])<<8 |
 		uint32(b[2])<<16 |
@@ -129,6 +132,7 @@ func (b LittleEndianBlock) Uint32(offset int) uint32 {
 // SetUint32 places the uint32 value at the specified offset.
 func (b LittleEndianBlock) SetUint32(offset int, value uint32) {
 	b = b[offset:] // runs faster this way
+	_ = b[3]       // early bounds check
 	b[0] = byte(value >> 0)
 	b[1] = byte(value >> 8)
 	b[2] = byte(value >> 16)
@@ -148,6 +152,7 @@ func (b LittleEndianBlock) SetInt32(offset int, value int32) {
 // Uint64 returns the uint64 value at the specified offset.
 func (b LittleEndianBlock) Uint64(offset int) uint64 {
 	b = b[offset:] // runs faster this way
+	_ = b[7]       // early bounds check
 	return uint64(b[0])<<0 |
 		uint64(b[1])<<8 |
 		uint64(b[2])<<16 |
@@ -161,6 +166,7 @@ func (b LittleEndianBlock) Uint64(offset int) uint64 {
 // SetUint64 places the uint64 value at the specified offset.
 func (b LittleEndianBlock) SetUint64(offset int, value uint64) {
 	b = b[offset:] // runs faster this way
+	_ = b[7]       // early bounds check
 	b[0] = byte(value >> 0)
 	b[1] = byte(value >> 8)
 	b[2] = byte(value >> 16)
@@ -230,6 +236,7 @@ func (b BigEndianBlock) SetInt8(offset int, value int8) {
 // Uint16 returns the uint16 value at the specified offset.
 func (b BigEndianBlock) Uint16(offset int) uint16 {
 	b = b[offset:] // runs faster this way
+	_ = b[1]       // early bounds check
 	return uint16(b[1])<<0 |
 		uint16(b[0])<<8
 }
@@ -237,6 +244,7 @@ func (b BigEndianBlock) Uint16(offset int) uint16 {
 // SetUint16 places the uint16 value at the specified offset.
 func (b BigEndianBlock) SetUint16(offset int, value uint16) {
 	b = b[offset:] // runs faster this way
+	_ = b[1]       // early bounds check
 	b[1] = byte(value >> 0)
 	b[0] = byte(value >> 8)
 }
@@ -254,6 +262,7 @@ func (b BigEndianBlock) SetInt16(offset int, value int16) {
 // Uint32 returns the uint32 value at the specified offset.
 func (b BigEndianBlock) Uint32(offset int) uint32 {
 	b = b[offset:] // runs faster this way
+	_ = b[3]       // early bounds check
 	return uint32(b[3])<<0 |
 		uint32(b[2])<<8 |
 		uint32(b[1])<<16 |
@@ -263,6 +272,7 @@ func (b BigEndianBlock) Uint32(offset int) uint32 {
 // SetUint32 places the uint32 value at the specified offset.
 func (b BigEndianBlock) SetUint32(offset int, value uint32) {
 	b = b[offset:] // runs faster this way
+	_ = b[3]       // early bounds check
 	b[3] = byte(value >> 0)
 	b[2] = byte(value >> 8)
 	b[1] = byte(value >> 16)
@@ -282,6 +292,7 @@ func (b BigEndianBlock) SetInt32(offset int, value int32) {
 // Uint64 returns the uint64 value at the specified offset.
 func (b BigEndianBlock) Uint64(offset int) uint64 {
 	b = b[offset:] // runs faster this way
+	_ = b[7]       // early bounds check
 	return uint64(b[7])<<0 |
 		uint64(b[6])<<8 |
 		uint64(b[5])<<16 |
@@ -295,6 +306,7 @@ func (b BigEndianBlock) Uint64(offset int) uint64 {
 // SetUint64 places the uint64 value at the specified offset.
 func (b BigEndianBlock) SetUint64(offset int, value uint64) {
 	b = b[offset:] // runs faster this way
+	_ = b[7]       // early bounds check
 	b[7] = byte(value >> 0)
 	b[6] = byte(value >> 8)
 	b[5] = byte(value >> 16)
