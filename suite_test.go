@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestGblob(t *testing.T) {
+func TestGBlob(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "Gblob Suite")
+	RunSpecs(t, "GBlob Suite")
 }
