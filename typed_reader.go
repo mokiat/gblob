@@ -41,6 +41,11 @@ type TypedReader interface {
 	// ReadBytes reads exactly len(target) bytes from the source and places
 	// them inside target.
 	ReadBytes(target []byte) error
+
+	// SkipBytes will skip the number of bytes specified. If the underlying
+	// reader is a Seeker, it will use Seek to skip the bytes, otherwise it will
+	// read the bytes and discard them.
+	SkipBytes(count int) error
 }
 
 // NewLittleEndianReader returns an implementation of TypedReader that reads
@@ -119,6 +124,16 @@ func (r *typedReader[T]) ReadFloat64() (float64, error) {
 func (r *typedReader[T]) ReadBytes(target []byte) error {
 	_, err := io.ReadFull(r.in, target)
 	return err
+}
+
+func (r *typedReader[T]) SkipBytes(count int) error {
+	if seeker, ok := r.in.(io.Seeker); ok {
+		_, err := seeker.Seek(int64(count), io.SeekCurrent)
+		return err
+	} else {
+		_, err := io.CopyN(io.Discard, r.in, int64(count))
+		return err
+	}
 }
 
 func (r *typedReader[T]) fillBuffer(count int) error {

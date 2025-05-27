@@ -171,6 +171,16 @@ var _ = Describe("LittleEndianReader", func() {
 		Expect(reader.ReadBytes(target)).To(Succeed())
 		Expect(target).To(Equal([]uint8{0x34, 0x65}))
 	})
+
+	Specify("SkipBytes", func() {
+		buffer.Write([]uint8{0x11, 0x34, 0x65, 0x75})
+
+		Expect(reader.SkipBytes(2)).To(Succeed())
+
+		target := make([]uint8, 2)
+		Expect(reader.ReadBytes(target)).To(Succeed())
+		Expect(target).To(Equal([]uint8{0x65, 0x75}))
+	})
 })
 
 var _ = Describe("BigEndianReader", func() {
