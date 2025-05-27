@@ -41,7 +41,7 @@ type PackedDecoder struct {
 }
 
 // Decode decodes the specified target value from the Reader.
-func (d *PackedDecoder) Decode(target interface{}) error {
+func (d *PackedDecoder) Decode(target any) error {
 	value := reflect.ValueOf(target)
 	return d.decodeValue(value)
 }
