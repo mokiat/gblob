@@ -23,7 +23,7 @@ func Benchmark_BlockAPI_Block(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		for i := range itemCount {
 			data.SetUint32(i*4, uint32(i))
 		}
@@ -48,7 +48,7 @@ func Benchmark_BlockAPI_ByteOrder(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		for i := range itemCount {
 			binary.LittleEndian.PutUint32(data[i*4:], uint32(i))
 		}
@@ -76,7 +76,7 @@ func Benchmark_Writer_TypedWriter(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		data.Reset()
 		for i := range itemCount {
 			writer.WriteUint32(uint32(i))
@@ -94,7 +94,7 @@ func Benchmark_Writer_BinaryWrite(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		data.Reset()
 		for i := range itemCount {
 			binary.Write(data, binary.LittleEndian, uint32(i))
@@ -122,7 +122,7 @@ func Benchmark_Reader_TypedReader(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		seeker.Reset(data)
 		sum := uint32(0)
 		for range itemCount {
@@ -146,7 +146,7 @@ func Benchmark_Reader_BinaryRead(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		seeker.Reset(data)
 		sum := uint32(0)
 		for range itemCount {
@@ -197,7 +197,7 @@ func Benchmark_Encoder_PackedEncoder(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		data.Reset()
 
 		for range itemCount {
@@ -244,7 +244,7 @@ func Benchmark_Encoder_GobEncoder(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		data.Reset()
 
 		for range itemCount {
@@ -302,7 +302,7 @@ func Benchmark_Decoder_PackedDecoder(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		seeker.Reset(data.Bytes())
 
 		for range itemCount {
@@ -357,7 +357,7 @@ func Benchmark_Decoder_GobDecoder(b *testing.B) {
 
 	b.ResetTimer()
 
-	for range b.N {
+	for b.Loop() {
 		seeker.Reset(data.Bytes())
 
 		for range itemCount {
