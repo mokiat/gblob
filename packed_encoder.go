@@ -47,7 +47,7 @@ func (e *PackedEncoder) Encode(source any) error {
 
 func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 	if value.Type().Implements(encodableType) {
-		encodable := value.Interface().(PackedEncodable)
+		encodable, _ := reflect.TypeAssert[PackedEncodable](value)
 		return encodable.EncodePacked(e.out)
 	}
 	switch kind := value.Kind(); kind {
@@ -81,7 +81,7 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		return e.out.WriteFloat64(float64(value.Float()))
 	case reflect.Array:
 		count := value.Len()
-		for i := 0; i < count; i++ {
+		for i := range count {
 			if err := e.encodeValue(value.Index(i)); err != nil {
 				return err
 			}
@@ -93,10 +93,10 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 			return err
 		}
 		if value.Type().Elem().Kind() == reflect.Uint8 { // fast track
-			data := value.Interface().([]uint8)
+			data, _ := reflect.TypeAssert[[]uint8](value)
 			return e.out.WriteBytes(data)
 		} else {
-			for i := 0; i < count; i++ {
+			for i := range count {
 				if err := e.encodeValue(value.Index(i)); err != nil {
 					return err
 				}
@@ -121,19 +121,17 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		}
 		return nil
 	case reflect.String:
-		count := value.Len()
-		if err := e.out.WriteUint64(uint64(count)); err != nil {
+		str := value.String()
+		if err := e.out.WriteUint64(uint64(len(str))); err != nil {
 			return err
 		}
-		for i := 0; i < count; i++ {
-			if err := e.encodeValue(value.Index(i)); err != nil {
-				return err
-			}
+		if err := e.out.WriteBytes([]byte(str)); err != nil {
+			return err
 		}
 		return nil
 	case reflect.Struct:
 		fieldCount := value.NumField()
-		for i := 0; i < fieldCount; i++ {
+		for i := range fieldCount {
 			field := value.Field(i)
 			if err := e.encodeValue(field); err != nil {
 				return err
