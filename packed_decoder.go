@@ -51,7 +51,7 @@ func (d *PackedDecoder) decodeValue(value reflect.Value) error {
 		if value.Kind() == reflect.Pointer && value.IsNil() {
 			value.Set(reflect.New(value.Type().Elem()))
 		}
-		decodable := value.Interface().(PackedDecodable)
+		decodable, _ := reflect.TypeAssert[PackedDecodable](value)
 		return decodable.DecodePacked(d.in)
 	}
 	switch kind := value.Kind(); kind {
@@ -139,7 +139,7 @@ func (d *PackedDecoder) decodeValue(value reflect.Value) error {
 		return nil
 	case reflect.Array:
 		count := value.Len()
-		for i := 0; i < count; i++ {
+		for i := range count {
 			if err := d.decodeValue(value.Index(i)); err != nil {
 				return err
 			}
@@ -147,7 +147,7 @@ func (d *PackedDecoder) decodeValue(value reflect.Value) error {
 		return nil
 	case reflect.Struct:
 		fieldCount := value.NumField()
-		for i := 0; i < fieldCount; i++ {
+		for i := range fieldCount {
 			field := value.Field(i)
 			if err := d.decodeValue(field); err != nil {
 				return err
@@ -180,7 +180,7 @@ func (d *PackedDecoder) decodeValue(value reflect.Value) error {
 			return err
 		}
 		value.Set(reflect.MakeMapWithSize(value.Type(), int(count)))
-		for i := 0; i < int(count); i++ {
+		for range count {
 			entryKey := reflect.New(value.Type().Key())
 			if err := d.decodeValue(entryKey); err != nil {
 				return err
