@@ -181,4 +181,4 @@ Following is the comparison between `PackedDecoder` and `gob.Decoder`.
 | `PackedDecoder` | 17483112 ns/op | 2261422 B/op | 5120 allocs/op |
 | `gob.Decoder` | 45206563 ns/op | 11466272 B/op | 236565 allocs/op |
 
-> The `gob.Decoder` performs werse, especially when memory is concerned.
+> The `gob.Decoder` performs worse, especially when memory is concerned.
