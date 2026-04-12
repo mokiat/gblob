@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
-)
-
-var (
-	encodableType = reflect.TypeFor[PackedEncodable]()
+	"unsafe"
 )
 
 // PackedEncodable is an interface that can be implemented by types that want to
@@ -46,8 +43,7 @@ func (e *PackedEncoder) Encode(source any) error {
 }
 
 func (e *PackedEncoder) encodeValue(value reflect.Value) error {
-	if value.Type().Implements(encodableType) {
-		encodable, _ := reflect.TypeAssert[PackedEncodable](value)
+	if encodable, ok := reflect.TypeAssert[PackedEncodable](value); ok {
 		return encodable.EncodePacked(e.out)
 	}
 	switch kind := value.Kind(); kind {
@@ -93,8 +89,7 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 			return err
 		}
 		if value.Type().Elem().Kind() == reflect.Uint8 { // fast track
-			data, _ := reflect.TypeAssert[[]uint8](value)
-			return e.out.WriteBytes(data)
+			return e.out.WriteBytes(value.Bytes())
 		} else {
 			for i := range count {
 				if err := e.encodeValue(value.Index(i)); err != nil {
@@ -125,7 +120,8 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		if err := e.out.WriteUint64(uint64(len(str))); err != nil {
 			return err
 		}
-		if err := e.out.WriteBytes([]byte(str)); err != nil {
+		data := unsafe.Slice(unsafe.StringData(str), len(str))
+		if err := e.out.WriteBytes(data); err != nil {
 			return err
 		}
 		return nil
