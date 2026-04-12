@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"unsafe"
 )
 
 var (
@@ -123,7 +124,8 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 		if err := e.out.WriteUint64(uint64(len(str))); err != nil {
 			return err
 		}
-		if err := e.out.WriteBytes([]byte(str)); err != nil {
+		data := unsafe.Slice(unsafe.StringData(str), len(str))
+		if err := e.out.WriteBytes(data); err != nil {
 			return err
 		}
 		return nil
