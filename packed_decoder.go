@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"unsafe"
 )
 
 var (
@@ -201,7 +202,7 @@ func (d *PackedDecoder) decodeValue(value reflect.Value) error {
 		if err := d.in.ReadBytes(data); err != nil {
 			return err
 		}
-		value.SetString(string(data))
+		value.SetString(unsafe.String(unsafe.SliceData(data), len(data)))
 		return nil
 	default:
 		return fmt.Errorf("unsupported type: %v", kind)
