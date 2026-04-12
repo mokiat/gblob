@@ -93,8 +93,7 @@ func (e *PackedEncoder) encodeValue(value reflect.Value) error {
 			return err
 		}
 		if value.Type().Elem().Kind() == reflect.Uint8 { // fast track
-			data, _ := reflect.TypeAssert[[]uint8](value)
-			return e.out.WriteBytes(data)
+			return e.out.WriteBytes(value.Bytes())
 		} else {
 			for i := range count {
 				if err := e.encodeValue(value.Index(i)); err != nil {
