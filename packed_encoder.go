@@ -7,10 +7,6 @@ import (
 	"unsafe"
 )
 
-var (
-	encodableType = reflect.TypeFor[PackedEncodable]()
-)
-
 // PackedEncodable is an interface that can be implemented by types that want to
 // provide a custom packed encoding.
 type PackedEncodable interface {

@@ -7,7 +7,6 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/mokiat/gblob"
-	"github.com/mokiat/gog"
 )
 
 var _ = Describe("PackedEncoder", func() {
@@ -50,7 +49,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x01),
 		),
 		Entry("*bool",
-			gog.PtrOf(bool(true)),
+			new(bool(true)),
 			seq(0x01),
 		),
 		Entry("uint8",
@@ -58,7 +57,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x13),
 		),
 		Entry("*uint8",
-			gog.PtrOf(uint8(0x13)),
+			new(uint8(0x13)),
 			seq(0x13),
 		),
 		Entry("int8",
@@ -66,7 +65,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x13),
 		),
 		Entry("*int8",
-			gog.PtrOf(int8(0x13)),
+			new(int8(0x13)),
 			seq(0x13),
 		),
 		Entry("uint16",
@@ -74,7 +73,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0xCA, 0xF1),
 		),
 		Entry("*uint16",
-			gog.PtrOf(uint16(0xF1CA)),
+			new(uint16(0xF1CA)),
 			seq(0xCA, 0xF1),
 		),
 		Entry("int16",
@@ -82,7 +81,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0xCA, 0x31),
 		),
 		Entry("*int16",
-			gog.PtrOf(int16(0x31CA)),
+			new(int16(0x31CA)),
 			seq(0xCA, 0x31),
 		),
 		Entry("uint32",
@@ -90,7 +89,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x32, 0x76, 0xCA, 0xF1),
 		),
 		Entry("*uint32",
-			gog.PtrOf(uint32(0xF1CA7632)),
+			new(uint32(0xF1CA7632)),
 			seq(0x32, 0x76, 0xCA, 0xF1),
 		),
 		Entry("int32",
@@ -98,7 +97,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x32, 0x76, 0xCA, 0x31),
 		),
 		Entry("*int32",
-			gog.PtrOf(int32(0x31CA7632)),
+			new(int32(0x31CA7632)),
 			seq(0x32, 0x76, 0xCA, 0x31),
 		),
 		Entry("uint64",
@@ -106,7 +105,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x21, 0x73, 0xC4, 0xA3, 0x32, 0x76, 0xCA, 0xF1),
 		),
 		Entry("*uint64",
-			gog.PtrOf(uint64(0xF1CA7632A3C47321)),
+			new(uint64(0xF1CA7632A3C47321)),
 			seq(0x21, 0x73, 0xC4, 0xA3, 0x32, 0x76, 0xCA, 0xF1),
 		),
 		Entry("int64",
@@ -114,7 +113,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x21, 0x73, 0xC4, 0xA3, 0x32, 0x76, 0xCA, 0x31),
 		),
 		Entry("*int64",
-			gog.PtrOf(int64(0x31CA7632A3C47321)),
+			new(int64(0x31CA7632A3C47321)),
 			seq(0x21, 0x73, 0xC4, 0xA3, 0x32, 0x76, 0xCA, 0x31),
 		),
 		Entry("float32",
@@ -122,7 +121,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0xCD, 0xCC, 0x6C, 0x40),
 		),
 		Entry("*float32",
-			gog.PtrOf(float32(3.7)),
+			new(float32(3.7)),
 			seq(0xCD, 0xCC, 0x6C, 0x40),
 		),
 		Entry("float64",
@@ -130,7 +129,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0x0D, 0x40),
 		),
 		Entry("*float64",
-			gog.PtrOf(float64(3.7)),
+			new(float64(3.7)),
 			seq(0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0x0D, 0x40),
 		),
 		Entry("array",
@@ -138,7 +137,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F),
 		),
 		Entry("*array",
-			gog.PtrOf([3]uint16{0x31FA, 0x45AC, 0x5F21}),
+			new([3]uint16{0x31FA, 0x45AC, 0x5F21}),
 			seq(0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F),
 		),
 		Entry("CustomArray",
@@ -146,7 +145,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F),
 		),
 		Entry("*CustomArray",
-			gog.PtrOf(CustomArray([3]uint16{0x31FA, 0x45AC, 0x5F21})),
+			new(CustomArray([3]uint16{0x31FA, 0x45AC, 0x5F21})),
 			seq(0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F),
 		),
 		Entry("bytes", // fast track
@@ -157,7 +156,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*bytes", // fast track
-			gog.PtrOf([]uint8{0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21}),
+			new([]uint8{0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21}),
 			seq(
 				0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21, // items
@@ -171,7 +170,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*CustomBytes", // fast track
-			gog.PtrOf(CustomBytes{0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21}),
+			new(CustomBytes{0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21}),
 			seq(
 				0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0x31, 0xFA, 0x45, 0xAC, 0x5F, 0x21, // items
@@ -185,7 +184,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*slice",
-			gog.PtrOf([]uint16{0x31FA, 0x45AC, 0x5F21}),
+			new([]uint16{0x31FA, 0x45AC, 0x5F21}),
 			seq(
 				0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F, // items
@@ -199,7 +198,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*CustomSlice",
-			gog.PtrOf(CustomSlice([]uint16{0x31FA, 0x45AC, 0x5F21})),
+			new(CustomSlice([]uint16{0x31FA, 0x45AC, 0x5F21})),
 			seq(
 				0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0xFA, 0x31, 0xAC, 0x45, 0x21, 0x5F, // items
@@ -222,7 +221,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*map",
-			gog.PtrOf(map[uint8]uint16{
+			new(map[uint8]uint16{
 				0xAC: 0x37FA,
 				0x05: 0x51A2,
 			}),
@@ -245,7 +244,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*string",
-			gog.PtrOf("hello"),
+			new("hello"),
 			seq(
 				0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0x68, 0x65, 0x6C, 0x6C, 0x6F, // items
@@ -259,7 +258,7 @@ var _ = Describe("PackedEncoder", func() {
 			),
 		),
 		Entry("*CustomString",
-			gog.PtrOf(CustomString("hello")),
+			new(CustomString("hello")),
 			seq(
 				0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // length
 				0x68, 0x65, 0x6C, 0x6C, 0x6F, // items
@@ -278,7 +277,7 @@ var _ = Describe("PackedEncoder", func() {
 			seq(0x66, 0x55, 0xFF, 0x01),
 		),
 		Entry("*struct",
-			gog.PtrOf(struct {
+			new(struct {
 				A uint16
 				B uint8
 				C uint8
