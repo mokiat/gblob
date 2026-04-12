@@ -46,8 +46,7 @@ func (e *PackedEncoder) Encode(source any) error {
 }
 
 func (e *PackedEncoder) encodeValue(value reflect.Value) error {
-	if value.Type().Implements(encodableType) {
-		encodable, _ := reflect.TypeAssert[PackedEncodable](value)
+	if encodable, ok := reflect.TypeAssert[PackedEncodable](value); ok {
 		return encodable.EncodePacked(e.out)
 	}
 	switch kind := value.Kind(); kind {
